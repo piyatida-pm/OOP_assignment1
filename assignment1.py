@@ -133,7 +133,7 @@ class Library:
         books.append(book)
         print(f"Book '{title}' added successfully!")
 
-    def add_member(member_id, name, email):
+    def add_member(self,member_id, name, email):
         """Register a new library member"""
         member = {
             'id': member_id,
@@ -144,10 +144,10 @@ class Library:
         members.append(member)
         print(f"Member '{name}' registered successfully!")
 
-    def borrow_book(member_id, book_id):
+    def borrow_book(self,member_id, book_id):
         """Process a book borrowing transaction"""
-        member = find_member(member_id)
-        book = find_book(book_id)
+        member = self.find_member(member_id)
+        book = self.find_book(book_id)
 
         if not member:
             print("Error: Member not found!")
@@ -180,10 +180,10 @@ class Library:
         print(f"{member['name']} borrowed '{book['title']}'")
         return True
 
-    def return_book(member_id, book_id):
+    def return_book(self,member_id, book_id):
         """Process a book return transaction"""
-        member = find_member(member_id)
-        book = find_book(book_id)
+        member = self.find_member(member_id)
+        book = self.find_book(book_id)
 
         if not member or not book:
             print("Error: Member or book not found!")
@@ -206,26 +206,26 @@ class Library:
         print(f"{member['name']} returned '{book['title']}'")
         return True
 
-    def display_available_books():
+    def display_available_books(self):
         """Display all books with available copies"""
         print("\n=== Available Books ===")
         for book in books:
             if book['available_copies'] > 0:
                 print(f"{book['title']} by {book['author']} - {book['available_copies']} copies available")
-    
-    def display_member_books(member_id):
+
+    def display_member_books(self,member_id):
         """Display books borrowed by a specific member"""
-        member = find_member(member_id)
+        member = self.find_member(member_id)
         if not member:
             print("Error: Member not found!")
             return
-        
+
         print(f"\n=== Books borrowed by {member['name']} ===")
         if not member['borrowed_books']:
             print("No books currently borrowed")
         else:
             for book_id in member['borrowed_books']:
-                book = find_book(book_id)
+                book = self.find_book(book_id)
                 if book:
                     print(f"- {book['title']} by {book['author']}")
 
