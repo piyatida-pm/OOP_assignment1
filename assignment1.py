@@ -4,6 +4,75 @@ books = []
 members = []
 borrowed_books = []
 
+class Book:
+    def __init__(self,book_id, title, author, available_copies):
+        self.book_id = int(book_id)
+        self.title = title
+        self.author = author
+        self.available_copies = int(available_copies)
+
+    def __status__(self):
+        return f"ID: {self.book_id}, Title: {self.title}, Author: {self.author}, Available number: {self.available_copies}."
+    
+    def borrow_book(self,member_id, book_id):
+        member = self.find_member(member_id)
+        book = self.find_book(book_id)
+
+        if not member:
+            print("Error: Member not found!")
+            return False
+
+        if not book:
+            print("Error: Book not found!")
+            return False
+
+        if book['available_copies'] <= 0:
+            print("Error: No copies available!")
+            return False
+
+        if len(member['borrowed_books']) >= 3:
+            print("Error: Member has reached borrowing limit!")
+            return False
+
+        # Process the borrowing
+        book['available_copies'] -= 1
+        member['borrowed_books'].append(book_id)
+
+        transaction = {
+            'member_id': member_id,
+            'book_id': book_id,
+            'member_name': member['name'],
+            'book_title': book['title']
+        }
+        borrowed_books.append(transaction)
+
+        print(f"{member['name']} borrowed '{book['title']}'")
+        return True
+
+    def return_book(self,member_id, book_id):
+        member = self.find_member(member_id)
+        book = self.find_book(book_id)
+
+        if not member or not book:
+            print("Error: Member or book not found!")
+            return False
+
+        if book_id not in member['borrowed_books']:
+            print("Error: This member hasn't borrowed this book!")
+            return False
+
+        # Process the return
+        book['available_copies'] += 1
+        member['borrowed_books'].remove(book_id)
+
+        # Remove from borrowed_books list
+        for i, transaction in enumerate(borrowed_books):
+            if transaction['member_id'] == member_id and transaction['book_id'] == book_id:
+                borrowed_books.pop(i)
+                break
+            
+        print(f"{member['name']} returned '{book['title']}'")
+        return True
 def add_book(book_id, title, author, available_copies):
     """Add a new book to the library"""
     book = {
