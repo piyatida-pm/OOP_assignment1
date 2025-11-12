@@ -73,6 +73,35 @@ class Book:
             
         print(f"{member['name']} returned '{book['title']}'")
         return True
+    
+class Member:
+
+    max_borrowed_limit = 3
+
+    def __init__(self, name, member_id, email):
+        self.name = name
+        self.member_id = int(member_id)
+        self.email = email
+        self.borrowed_book = []
+
+    def __status__(self):
+        return f"ID: {self.member_id}, Name: {self.name}, Email: {self.email}, Borrowed number: {len(self.borrowed_book)}."
+
+    def can_borrowed(self) -> bool:
+        return len(self.borrowed_book) < self.max_borrowed_limit
+    
+    def borr_book(self, book_id) -> bool:
+        self.borrowed_book.append(book_id)
+        return True
+    
+    def return_books(self,book_id) -> bool:
+        try:
+            self.borrowed_book.remove(book_id)
+            return True
+        except ValueError:
+            return False
+        
+        
 def add_book(book_id, title, author, available_copies):
     """Add a new book to the library"""
     book = {
