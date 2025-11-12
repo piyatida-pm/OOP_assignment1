@@ -122,7 +122,7 @@ class Library:
         return None
     
     """Add a new book to the library"""
-    def add_book(book_id, title, author, available_copies):
+    def add_book(self,book_id, title, author, available_copies):
         book = {
             'id': book_id,
             'title': title,
